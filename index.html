@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>Confetti Rush — لعبة التجمعات</title>
+<meta name="theme-color" content="#7c3aed">
+<style>
+body{font-family:"Tajawal",sans-serif;text-align:center;margin:0;background:#fff}
+h1{background:#7c3aed;color:#fff;margin:0;padding:12px}
+#game{margin:20px auto;width:90%;height:400px;border:2px dashed #ccc;position:relative;overflow:hidden;border-radius:12px}
+.confetti{position:absolute;width:40px;height:40px;border-radius:10px;background:#a78bfa;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;cursor:pointer}
+button{margin:10px;padding:10px 16px;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+#start{background:#7c3aed;color:#fff}
+#scoreBox{margin:10px;font-size:18px}
+</style>
+</head>
+<body>
+<h1>🎉 Confetti Rush</h1>
+<div id="scoreBox">Score: <span id="score">0</span></div>
+<button id="start">Start Game</button>
+<div id="game"></div>
+<script>
+const game=document.getElementById('game');
+const scoreEl=document.getElementById('score');
+let score=0,playing=false,timer;
+function spawn(){
+  if(!playing) return;
+  const el=document.createElement('div');
+  el.className='confetti'; el.textContent='★';
+  el.style.left=Math.random()*(game.clientWidth-40)+'px';
+  el.style.top='-40px';
+  game.appendChild(el);
+  let y=-40;
+  const fall=setInterval(()=>{
+    y+=3; el.style.top=y+'px';
+    if(y>game.clientHeight){el.remove();clearInterval(fall);}
+  },30);
+  el.onclick=()=>{score++;scoreEl.textContent=score;el.remove();clearInterval(fall);};
+}
+document.getElementById('start').onclick=()=>{
+  game.innerHTML='';score=0;scoreEl.textContent=0;playing=true;
+  clearInterval(timer);
+  timer=setInterval(spawn,600);
+  setTimeout(()=>{playing=false;clearInterval(timer);alert('Final Score: '+score);},20000);
+};
+</script>
+</body>
+</html>
